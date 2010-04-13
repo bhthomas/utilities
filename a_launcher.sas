@@ -38,73 +38,86 @@ Now, compare with what is in the data directory
 		select distinct a.memname into :mem1-:mem999
 		from ((select distinct memname from 
 					dictionary.tables
-					where libname eq 'BASE')a
+					where libname eq 'COMPARE')a
 					inner join
 					(select distinct memname from 
 					dictionary.tables
-					where libname eq 'BASE') b
+					where libname eq 'COMPARE') b
 					on a.memname=b.memname);
 	quit;
 	%let num_=&sqlobs;
 	%do i= 1 %to &num_;
 	proc sort data= base.&&mem&i out=base;
-		by _ALL_;
+			by PID INVSITE ;
 	run;
 	proc sort data= compare.&&mem&i out=compare;
-		by _ALL_;
+	by PID INVSITE ;
 	run;	
 
 	title "Dataset Comparison for &&mem&i";
 	title2 "Base=..\data compare=..\data\compare";
 			proc compare base=base compare=compare out=result  
 					outnoequal outbase outcomp outdif noprint;
-				id PID INVSITE ;
+				by PID INVSITE ;
 			run;
 			
-			data cresult(keep=m _OBS_ _TYPE_ var pid varname invsite);
-				set result(where =(_TYPE_='DIF'));
-				array chr(*) _CHARACTER_;
-				length var $40 varname $10;
-				 n=_N_;
-				 put n=;
-				do i= 1 to dim(chr);
-					if index(chr(i),'X')>0 then do;
-						set result point=n; 
-						put chr(i)=;
-						var=chr(i);
-						m=n;
-						varname=vname(chr(i));
-						output;
-					end;	
+	data  cbase ccmpare;
+				set result;
+				array nm(*) _CHARACTER_;
+				do i= 1 to dim(nm);
+						var=nm(i);
+						varname=vname(nm(i));
+						varlabel=vlabel(nm(i));
+						format=vformat(nm(i));
+							*	if _TYPE_='DIF' and index(var,'XX')>0 then output cdif;
+								if _TYPE_='BASE' then output cbase;
+								if _TYPE_='COMPARE' then output ccmpare;
 				end;
+				keep _OBS_   var pid varname varlabel format invsite;
+			run;		
+
+			proc sort data=cbase;
+				by pid invsite _OBS_ varname;
+			run;	
+	
+			proc sort data=ccmpare;
+				by pid invsite _OBS_ varname;
+			run;	
+	
+			data characters;
+				merge cbase(in=inbase rename=(var=base)) /*cdif(in=indif rename=(var=diff))*/ 
+							ccmpare(in=incmp rename=(var=compare));
+				by pid invsite _OBS_ varname;
+				if base ^=compare and varname ne '_TYPE_';
 			run;
 			
 			title3 "Character Variable Differences";
-			proc print data=cresult;
+		
+			proc print data =Characters;
+				var pid invsite _OBS_ varname varlabel format base  compare;
 			run;
 			
-			data ndif nbase ncmpare;
+			
+			data  nbase ncmpare;
 				set result;
 				array nm(*) _NUMERIC_;
 				do i= 1 to dim(nm);
 					if index(nm(i),'E')=0  then do;
-						put nm(i)=;
 						var=nm(i);
+						varlabel=vlabel(nm(i));
 						varname=vname(nm(i));
 						format=vformat(nm(i));
 						if varname ne '_OBS_' then do;
-								if _TYPE_='DIF' then output ndif;
+								*if _TYPE_='DIF' then output ndif;
 								if _TYPE_='BASE' then output nbase;
 								if _TYPE_='COMPARE' then output ncmpare;
 						end;	
 					end;
 				end;
-				keep _OBS_ _TYPE_  var pid varname format invsite;
+				keep _OBS_ _TYPE_  var pid varname varlabel format invsite;
 			run;		
 
-			proc sort data=ndif;
-				by pid invsite _OBS_ varname;
-			run;	
+		
 			proc sort data=nbase;
 				by pid invsite _OBS_ varname;
 			run;	
@@ -114,19 +127,23 @@ Now, compare with what is in the data directory
 			run;	
 
 			data numerics;
-				merge nbase(rename=(var=base)) ndif(in=indif rename=(var=diff)) ncmpare(rename=(var=compare));
+				merge nbase(rename=(var=base))  ncmpare(rename=(var=compare));
 				by pid invsite _OBS_ varname;
-				if indif;
-				drop _TYPE_;
+			if base ^=compare and varname ne '_TYPE_';
 			run;
+		
 			
 			title3 "Numeric Variable Differences";
 			
 			proc print data =numerics;
+			var pid invsite _OBS_ varname varlabel format base  compare;
+
 			run;
+			
 	%end;
 
 %mend;
+options mprint;
 %compare;					
 endsas;
 %*------------------------------------------------
