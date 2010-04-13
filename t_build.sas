@@ -5,7 +5,7 @@ Purpose:    reads a lookup file with program names and launches the program
 
 Author:		Bruce Thomas
 
-Project:    Delcath Phase III
+Project:     Phase III
 
 Inputs:     program names  in T_NUM_NUM2_NUM3_REST.sas form
 
@@ -27,11 +27,11 @@ Revisions:
 
 %macro t_build(
 			type_=tables
-			,config=%str(C:\projects\delcath\melmel\CONFIG\TABLES.XLS)
+			,config=%str(C:\projects\\melmel\CONFIG\TABLES.XLS)
 			,where= %str(where tabno is not missing)
 			,outds=t_build
-			,prgmpath=%str(F:\Data\Phase III data\Programs\To Delcath\Table pgm\tables)
-			,outPath_=%str(C:\projects\delcath\melmel\output)
+			,prgmpath=%str(F:\Data\Phase III data\Programs\To \Table pgm\tables)
+			,outPath_=%str(C:\projects\\melmel\output)
 			,returnc=TEST
 			);
 

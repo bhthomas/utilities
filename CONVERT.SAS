@@ -3,8 +3,8 @@
 			,config=%str(PHASEII.XLS)
 			,where= %str(where NUMBER is not missing)
 			,outds=t_build
-			,prgmpath=%str(F:\Data\Phase III data\Programs\To Delcath\Table pgm\tables)
-			,outPath_=%str(C:\projects\delcath\melmel\output)
+			,prgmpath=%str(F:\Data\Phase III data\Programs\To \Table pgm\tables)
+			,outPath_=%str(C:\projects\\melmel\output)
 			,returnc=TEST
 			);
 
@@ -59,7 +59,7 @@ RUN;
 			,config=%str(..\config\PhaseII.xls)
 			,where= %str(where tabno is not missing)
 			,outds=t_build
-			,prgmpath=%str(F:\Data\Phase III data\Programs\To Delcath\Table pgm\tables)
-			,outPath_=%str(C:\projects\delcath\melmel\output)
+			,prgmpath=%str(F:\Data\Phase III data\Programs\To \Table pgm\tables)
+			,outPath_=%str(C:\projects\\melmel\output)
 			,returnc=TEST);
 		

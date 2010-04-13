@@ -1,5 +1,5 @@
 %*------------------------------------------------
-Sponsor:	Delcath
+Sponsor:	
 
 Program:	reportRTF.sas    
 Protocol: 04C-273M
@@ -207,7 +207,7 @@ IS PROVIDED VIA &CONMETA
 		
 		    when ('ALL')  do;col='C9' ;labl= 'All Groups |(N = '||trim(left(put(TOTN,best.)))||')';end;
 		    when ('BAC')  do;col='C2' ;labl= 'Best Alternative Care |(N = '||trim(left(put(TOTN,best.)))||')';end;
-		    when ('PHP')  do;col='C1' ;labl= 'Delcath | (N = '||trim(left(put(TOTN,best.)))||')';end;
+		    when ('PHP')  do;col='C1' ;labl= ' | (N = '||trim(left(put(TOTN,best.)))||')';end;
 				when('1') do;col='C1' ;labl= 'Neuroendocrine| Tumors | (N = '||trim(left(put(TOTN,best.)))||')';end;
 				when('2') do;col='C2' ;labl= 'Primary |Hepatic |Malignancies | (N = '||trim(left(put(TOTN,best.)))||')';end;
 				when('3') do;col='C3' ;labl= 'Adenocarcinoma|Of Gastrointestinal|And Other Origins | (N = '||trim(left(put(TOTN,best.)))||')';end;
@@ -415,7 +415,7 @@ options orientation=&ORIENTATION
 				missing=' ';
 				
 /*  this was for BODYTITLE, but My knowledge of rtf inline is kind of limited
-%let _title1= "^R/RTF'\brdrb\brdrs\brdrw15\ql\b\fs24 ' Delcath Systems Inc. - DSI 04-C-0273M ^R/RTF'\tab\tab\tab\tab\tab\tab\tab\tab\tab' %sysfunc(date(),date9.)    %sysfunc(time(),time5.)  ";
+%let _title1= "^R/RTF'\brdrb\brdrs\brdrw15\ql\b\fs24 '  Systems Inc. - DSI 04-C-0273M ^R/RTF'\tab\tab\tab\tab\tab\tab\tab\tab\tab' %sysfunc(date(),date9.)    %sysfunc(time(),time5.)  ";
 %let _title2= "^R/RTF'\brdrb\brdrs\brdrw15\ql\b\fs24 ' DSI MEPHALAN Melanoma ^R/RTF'\tab\tab\tab\tab\tab\tab\tab\tab\tab\tab\tab' Page ^{pageof}";
 %let _footer1= "^R/RTF'\brdrb\brdrs\brdrw15\ql\ 'Program: ^R/RTF'\tab' &pgmname..sas"; 
 %let _footer2= "^R/RTF'\brdrb\brdrs\brdrw15\ql\ 'File:          ^R/RTF'\tab' &outfile..rtf"; ;

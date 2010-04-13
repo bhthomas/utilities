@@ -1,5 +1,5 @@
 %*------------------------------------------------
-Sponsor:   	Delcath
+Sponsor:   	
 
 Program:	  imputer.sas
 Protocol:     04C-273M

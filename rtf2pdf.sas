@@ -1,9 +1,9 @@
 %*-------------------------------------------------------------
-Sponsor:   		Delcath
+Sponsor:   		
 
 Program:			rtf2pdf.sas
 
-Protocol:     C:\projects\delcath\phase2\macros\
+Protocol:     C:\projects\\phase2\macros\
 
 
 Purpose:			convert RTF doc to PDF
@@ -108,8 +108,8 @@ filename sas2word clear;
 
 %*------------------------------------------------
 USAGE:
-let root=C:\projects\delcath\phase2\listings\
-let target=C:\projects\delcath\phase2\tests\
+let root=C:\projects\\phase2\listings\
+let target=C:\projects\\phase2\tests\
 rtf2pdf(root=&root,filename=L_12_ttph.rtf,
 					outfile=L_12_ttph.pdf,target=&target)
 --------------------------------------------------;

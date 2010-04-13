@@ -1,9 +1,9 @@
 %*-------------------------------------------------------------
-Sponsor:   		Delcath
+Sponsor:   		
 
 Program:			hash_match.sas
 
-Protocol:     C:\projects\delcath\phase2\programs\
+Protocol:     C:\projects\\phase2\programs\
 
 
 Purpose:			Combines small and large datasets on common keys

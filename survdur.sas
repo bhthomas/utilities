@@ -1,9 +1,9 @@
 %*-------------------------------------------------------------
-Sponsor:   		Delcath
+Sponsor:   		
 
 Program:			survdur.sas
 
-Protocol:     C:\projects\delcath\phase2\macros\
+Protocol:     C:\projects\\phase2\macros\
 
 
 Purpose:			Figures for PFS Survival Wrapper for STEPLOT.sas

@@ -1,5 +1,5 @@
 %*------------------------------------------------
-Sponsor:   Delcath
+Sponsor:   
 
 Program:			Studyday.sas(v9.1)
 Protocol:     04C-273M

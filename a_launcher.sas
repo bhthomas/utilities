@@ -1,9 +1,9 @@
 %*-------------------------------------------------------------
-Sponsor:   		Delcath
+Sponsor:   		
 
 Program:			a_launcher.sas
 
-Protocol:     C:\projects\delcath\Phase III\import\
+Protocol:     C:\projects\\Phase III\import\
 
 
 Purpose:			build datasets from ASCII files

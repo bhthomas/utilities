@@ -1,5 +1,5 @@
 %*------------------------------------------------
-Sponsor:	Delcath
+Sponsor:	
 
 Program:	styles.sas
 Protocol:	 04C-273M
