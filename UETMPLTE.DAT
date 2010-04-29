@@ -1,0 +1,32 @@
+Template ID::EndIDUETMPNAME~:cool footer         *---*---*---*---*---*---*-->>>>    End of Program    <<<<--*---*---*---*---*---*---*;
+:~End Template~:Template ID::EndIDUETMPNAME~:header              %*-------------------------------------------------------------
+Sponsor:   		Delcath
+
+Program:			[FILE_NAME].sas
+
+Protocol:     [FILE_PATH]
+
+
+Purpose:			
+
+Inputs:
+Depends:
+
+Outputs:
+
+Parameters:
+
+
+Author:       Bruce Thomas
+Date:	             [DATE_MDY]
+
+
+Usage:
+
+History:
+
+
+
+-----------------------------------------------------------------;:~End Template~:Template ID::EndIDUETMPNAME~:comment1            %*------------------------------------------------
+[$replace$]
+--------------------------------------------------;:~End Template~:
