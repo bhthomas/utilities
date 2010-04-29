@@ -3,7 +3,7 @@ Sponsor:
 
 Program:			hash_match.sas
 
-Protocol:     C:\projects\\phase2\programs\
+Protocol:     general
 
 
 Purpose:			Combines small and large datasets on common keys
@@ -36,15 +36,18 @@ History:
 
 -----------------------------------------------------------------;
 %macro hash_match(
-								keynames=pt invsite,
+								keynames=pt ,
 								varnames=age gender,
 								out=MATCH,
 								nonmatch=NOMATCH,
 								small=WORK.SMALL,
 								large=LARGE,
-								hashdim=0
+								hashdim=16,
+								keepCode=0,
+								order=no  /** no, a or d **/
 								);
 								
+%if %upcase(&keynames) ne ALL %then %do;
 %let tst=0;
 %let scan=DUMMY;
 %do %while(&scan ne  );
@@ -54,35 +57,47 @@ History:
 				%*------------------------------------------------
 				Quoting is kind of picky here
 				--------------------------------------------------;
-			%if &tst gt 1 %then  %let keys= "%trIM(&keys)%str(,)%bquote('&scan')";
+			%if &tst gt 1 %then  %let keys= %trIM(&keys)%str(,)%bquote('&scan');
 			%else %let keys=%bquote('&scan');
 	%end;	
+	
 %end;
+%let keys="&keys";
+%end;
+%else %let keys="all:'yes'";
 
+%if %upcase(&varnames) ne ALL %then %do;
+%let vars=;
 %let tst=0;
-%let scan=DUMMY;
-%do %while(&scan ne  );
+%let scan1=DUMMY;
+%do %while(&scan1 ne  );
 	%let tst=%eval(&tst+1);
-	%let scan=%trim( %scan(&varnames,&tst));
-	%if &scan ne %then %do;
+	%let scan1=%trim( %scan(&varnames,&tst));
+	%**put TST : &tst SCAN1: &scan1;
+	%if &scan1 ne %then %do;
 			%*------------------------------------------------
 			More quoting strangeness
 			--------------------------------------------------;
-			%if &tst gt 1 %then  %let vars= "%trim(&vars)%str(,)%bquote('&scan')";
-			%else %let vars=%bquote('&scan');
+			%if &tst gt 1 %then  %let vars= %trim(&vars)%str(,)%bquote('&scan1');
+			%else %let vars=%bquote('&scan1');
+	%**PUT VARS: &vars;
 	%end;	
 %end;
+%let vars="&vars";
+%end;
+%else %let vars="all:'yes'";
+%PUT KEYS: &keys  DATA VARS: &vars;
 
 data _null_;
 file "generated_code.sas";
 put "DATA &out(drop= dsn x ) &nonmatch;";
 put "	set &small (obs=1);";
-put	" retain dsn '&small' x &hashdim;";
-put '	dcl hash hh (dataset: dsn,hashexp:x);';
+put	" retain dsn '&small' x &hashdim ordr '%lowcase(&order)';";
+put '	dcl hash hh (dataset: dsn,hashexp:x, ordered:ordr);';
 put "	hh.DefineKey(" &keys ");";
 put "	hh.DefineData(" &vars	");";
 put ' hh.DefineDone ();';
-	
+
 put '	do until (eof2);';
 put "		  set &large end=eof2;";
 put '		  if hh.find()=0 then output match;';
@@ -96,7 +111,7 @@ run;
 OK, get the code
 --------------------------------------------------;
 %include generated_code;
-%sysexec(del generated_code.sas);
+%if &keepcode eq 0 %then %sysexec(del generated_code.sas);
 %mend;
 %*------------------------------------------------
 Usage:
@@ -107,15 +122,25 @@ Usage:
 Demo speedy match using direct addressing
 in Data step component interface.
 --------------------------------------------------;
-data small;
-	set derived.xdemog(keep= age gender pt mitt invsite);
-	where mitt='N';
+proc sort data= derived.xdemog(keep= age gender pt mitt invsite) out=small;
+	by gender age;
 run;
 
 %let small=work.small;
 %let large=derived.xlb(keep=pt lbtest testdt cycle lbvalchr invsite);
 
-options mprint;
-
-%hash_match(large=&large,small=&small);			  
+options mprint nomlogic nosymbolgen;
+%*------------------------------------------------
+add small dataset vars to large dataset
+on key=pt
+--------------------------------------------------;
+%hash_match(large=&large, /** larger dataset: all variables will be kept* **/ 
+						small=&small, /**smaller dataset,usually a lookup :all variables will be kept**/
+						out=MATCH,    /**outputs a dataset named MATCH (required)**/
+						nonmatch=no_match,    /** optional name of all other dataset**/
+						varnames=age pt, 			/** variable names to store in the hash object. Not needed yet**/
+						order=d,       /** order of the has output dataset **/
+						keynames=pt,   /** keys in order of use for lookup**/
+						keepcode=1     /** keep generated_code.sas 1=yes 0=no**/
+						);			  
 */
