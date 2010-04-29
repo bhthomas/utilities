@@ -91,13 +91,20 @@ History:
 data _null_;
 file "generated_code.sas";
 put "DATA &out(drop= dsn x ) &nonmatch;";
-put "	set &small (obs=1);";
 put	" retain dsn '&small' x &hashdim ordr '%lowcase(&order)';";
-put '	dcl hash hh (dataset: dsn,hashexp:x, ordered:ordr);';
+put "	if _n_=1 then do;";
+put "if 0 then 	set &small (obs=1);";
+
+put ' dcl hash hh (dataset: dsn,hashexp:x, ordered:ordr);';
 put "	hh.DefineKey(" &keys ");";
 put "	hh.DefineData(" &vars	");";
 put ' hh.DefineDone ();';
-
+put 'end;';
+/*put '	do until (eof1);';
+put "		  set &small end=eof2;";
+put '		  rc= hh.add();';
+put '	end;';
+*/
 put '	do until (eof2);';
 put "		  set &large end=eof2;";
 put '		  if hh.find()=0 then output match;';
@@ -137,9 +144,9 @@ on key=pt
 %hash_match(large=&large, /** larger dataset: all variables will be kept* **/ 
 						small=&small, /**smaller dataset,usually a lookup :all variables will be kept**/
 						out=MATCH,    /**outputs a dataset named MATCH (required)**/
-						nonmatch=no_match,    /** optional name of all other dataset**/
-						varnames=age pt, 			/** variable names to store in the hash object. Not needed yet**/
-						order=d,       /** order of the has output dataset **/
+						nonmatch=,    /** optional name of all other dataset**/
+						varnames=all, 			/** variable names to store in the hash object. Not needed yet**/
+						order=no,       /** order of the has output dataset **/
 						keynames=pt,   /** keys in order of use for lookup**/
 						keepcode=1     /** keep generated_code.sas 1=yes 0=no**/
 						);			  
