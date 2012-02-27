@@ -1,7 +1,7 @@
 %*--------------------------------------
 Macro:   SCANLOG.SAS 
 
-Author:	 Bruce Thomas, SGEN
+Author:	 Bruce Thomas
 Date:    Feb 02,2006
 Purpose:  Scan logs for QC
 
